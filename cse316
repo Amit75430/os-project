@@ -1,0 +1,64 @@
+#include<stdio.h> 
+#include<conio.h>
+#include<stdlib.h>
+int main() 
+{ 
+  int time;
+  int flag=0;
+  int remainder;
+  int count;
+  int time_quantums=10;
+  int i;
+  int n; 
+  int waiting_times=0;
+  int turn_around_times=0;
+  int arrival_times[10];
+  int burst_times[10];
+  int rt[10]; 
+  
+  printf("Enter the Total no of Processes that u want:\n "); 
+  scanf("%d",&n); 
+  remainder=n; 
+  for(count=0;count<n;count++) 
+  { 
+    printf("Enter arrival time and the burst time for Process Number is %d :",count+1); 
+    scanf("%d",&arrival_times[count]); 
+    scanf("%d",&burst_times[count]); 
+    rt[count]=burst_times[count]; 
+  } 
+  printf("Enter the time quantum: %d\t",time_quantums); 
+
+  printf("\n\nProcess\t|Turnaround Times|Waiting Times\n\n"); 
+  for(time=0,count=0;remainder!=0;) 
+  { 
+    if(rt[count]<=time_quantums && rt[count]>0) 
+    { 
+      time+=rt[count]; 
+      rt[count]=0; 
+      flag=1; 
+    } 
+    else if(rt[count]>0) 
+    { 
+      rt[count]-=time_quantums; 
+      time+=time_quantums; 
+    } 
+    if(rt[count]==0 && flag==1) 
+    { 
+      remainder--; 
+      printf("P[%d]\t|\t%d\t|\t%d\n",count+1,time-arrival_times[count],time-arrival_times[count]-burst_times[count]); 
+      waiting_times+=time-arrival_times[count]-burst_times[count]; 
+      turn_around_times+=time-arrival_times[count]; 
+      flag=0; 
+    } 
+    if(count==n-1) 
+      count=0; 
+    else if(arrival_times[count+1]<=time) 
+      count++; 
+    else 
+      count=0; 
+  } 
+  printf("\nTHE AVERAGE WAITING TIME= %f\n",waiting_times*1.0/n); 
+  printf("AVERAGE TURNAROUND TIME = %f",turn_around_times*1.0/n); 
+
+  return 0; 
+}
